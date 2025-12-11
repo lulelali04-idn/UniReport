@@ -6,6 +6,12 @@ This project was developed as a comprehensive assignment to demonstrate mobile a
 
 ---
 
+## Team Members
+* Kevin Heryanto [001202505027]
+* Alfarid Ridwan [001202405018]
+* Muhammad Naufal Gani [001202405016]
+* Ahmad Hussain
+
 ## Project Overview
 
 * Goal: Replace outdated paper complaints with a digital, real-time reporting system.
