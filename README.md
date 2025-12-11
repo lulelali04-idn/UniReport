@@ -10,7 +10,7 @@ This project was developed as a comprehensive assignment to demonstrate mobile a
 * Kevin Heryanto [001202505027]
 * Alfarid Ridwan [001202405018]
 * Muhammad Naufal Gani [001202405016]
-* Ahmad Hussain
+* Ahmad Anshori [001202405004]
 
 ## Project Overview
 
