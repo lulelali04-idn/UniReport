@@ -5,77 +5,118 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "UniReports.db";
-    private static final int DATABASE_VERSION = 1;
-    private static final String TABLE_NAME = "reports";
+    // NEW: Increment version to 4 to trigger onUpgrade
+    private static final int DATABASE_VERSION = 4;
+
+    private static final String TABLE_REPORTS = "reports";
+    private static final String TABLE_USERS = "users";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    // Runs once when the app is installed to create the table
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE " + TABLE_NAME + " (" +
+        // Create Reports Table with 'status'
+        String createReports = "CREATE TABLE " + TABLE_REPORTS + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "title TEXT, " +
                 "description TEXT, " +
-                "location TEXT)";
-        db.execSQL(createTable);
+                "location TEXT, " +
+                "category TEXT, " +
+                "status TEXT)"; // NEW COLUMN
+        db.execSQL(createReports);
+
+        String createUsers = "CREATE TABLE " + TABLE_USERS + " (" +
+                "username TEXT PRIMARY KEY, " +
+                "password TEXT, " +
+                "role TEXT)";
+        db.execSQL(createUsers);
+
+        // THIS IS THE "BAKED IN" ADMIN
+        // It runs automatically when the database is created
+        db.execSQL("INSERT INTO " + TABLE_USERS + " VALUES ('admin', 'admin123', 'admin')");
     }
 
-    // Runs if you change the version number (updates the schema)
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REPORTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         onCreate(db);
     }
 
-    // --- CRUD OPERATIONS ---
-
-    // 1. ADD (Create)
-    public boolean addReport(String title, String desc, String loc) {
+    // --- USER OPERATIONS ---
+    public boolean registerUser(String username, String password, String role) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
+        cv.put("username", username);
+        cv.put("password", password);
+        cv.put("role", role);
+        long result = db.insert(TABLE_USERS, null, cv);
+        return result != -1;
+    }
 
+    public String checkLogin(String username, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT role FROM " + TABLE_USERS + " WHERE username=? AND password=?", new String[]{username, password});
+        if (cursor.moveToFirst()) {
+            String role = cursor.getString(0);
+            cursor.close();
+            return role;
+        }
+        cursor.close();
+        return null;
+    }
+
+    // --- REPORT OPERATIONS ---
+    public boolean addReport(String title, String desc, String loc, String category) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
         cv.put("title", title);
         cv.put("description", desc);
         cv.put("location", loc);
-
-        long result = db.insert(TABLE_NAME, null, cv);
-        db.close();
-        return result != -1; // Returns true if insert was successful
+        cv.put("category", category);
+        cv.put("status", "Active"); // Default status is Active
+        return db.insert(TABLE_REPORTS, null, cv) != -1;
     }
 
-    // 2. GET ALL (Read)
+    // NEW: Method to mark as fixed
+    public void updateReportStatus(int id, String newStatus) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("status", newStatus);
+        db.update(TABLE_REPORTS, cv, "id=?", new String[]{String.valueOf(id)});
+    }
+
     public List<Report> getAllReports() {
         List<Report> returnList = new ArrayList<>();
-        String queryString = "SELECT * FROM " + TABLE_NAME + " ORDER BY id DESC"; // Newest first
-
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(queryString, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REPORTS + " ORDER BY id DESC", null);
 
         if (cursor.moveToFirst()) {
             do {
-                // Extract data from the cursor
                 int id = cursor.getInt(0);
                 String title = cursor.getString(1);
                 String desc = cursor.getString(2);
                 String loc = cursor.getString(3);
-
-                // Create object and add to list
-                returnList.add(new Report(id, title, desc, loc));
+                String category = cursor.getString(4);
+                String status = cursor.getString(5); // Get status
+                returnList.add(new Report(id, title, desc, loc, category, status));
             } while (cursor.moveToNext());
         }
-
         cursor.close();
-        db.close();
         return returnList;
+    }
+
+    public void deleteReport(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_REPORTS, "id=?", new String[]{String.valueOf(id)});
+        db.close();
     }
 }

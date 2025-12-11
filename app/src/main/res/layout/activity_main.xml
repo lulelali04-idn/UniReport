@@ -7,6 +7,15 @@
     android:padding="20dp"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log Out"
+        android:layout_gravity="end"
+        android:backgroundTint="#888888"
+        android:layout_marginBottom="10dp"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,6 +47,19 @@
         android:minLines="3"
         android:gravity="top"
         android:inputType="textMultiLine"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Category:"
+        android:layout_marginTop="10dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:layout_marginBottom="10dp"/>
 
     <Button
         android:id="@+id/btnSubmit"
