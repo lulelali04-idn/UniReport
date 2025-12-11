@@ -1,86 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp"
-    tools:context=".MainActivity">
-
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Log Out"
-        android:layout_gravity="end"
-        android:backgroundTint="#888888"
-        android:layout_marginBottom="10dp"/>
+    android:padding="30dp"
+    android:background="#F2F2F7"
+    android:gravity="center_vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="UniReport"
-        android:textSize="28sp"
+        android:textSize="40sp"
         android:textStyle="bold"
-        android:textColor="@android:color/holo_blue_dark"
-        android:layout_marginBottom="20dp"/>
-
-    <EditText
-        android:id="@+id/etTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Issue Title (e.g. Broken Projector)"
-        android:inputType="textCapSentences"/>
-
-    <EditText
-        android:id="@+id/etLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Location (e.g. Science Block A)"
-        android:inputType="textCapWords"/>
-
-    <EditText
-        android:id="@+id/etDesc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Description of the issue..."
-        android:minLines="3"
-        android:gravity="top"
-        android:inputType="textMultiLine"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Category:"
-        android:layout_marginTop="10dp"/>
-
-    <Spinner
-        android:id="@+id/spinnerCategory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
+        android:textColor="#000000"
         android:layout_marginBottom="10dp"/>
 
-    <Button
-        android:id="@+id/btnSubmit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Submit Report"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@android:color/holo_blue_dark"/>
-
     <TextView
+        android:id="@+id/tvWelcomeRole"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Recent Reports"
-        android:layout_marginTop="25dp"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:text="Welcome, Student"
+        android:textSize="20sp"
+        android:textColor="#8E8E93"
+        android:layout_marginBottom="50dp"/>
 
-    <ListView
-        android:id="@+id/listViewReports"
+    <Button
+        android:id="@+id/btnGoReport"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"/>
+        android:layout_height="70dp"
+        android:text="📝  New Report"
+        android:textSize="20sp"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="#007AFF"
+        android:elevation="5dp"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:id="@+id/btnGoList"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:text="⚠️  Ongoing Problems"
+        android:textSize="20sp"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="#FF3B30"
+        android:elevation="5dp"
+        android:layout_marginBottom="40dp"/>
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Log Out"
+        android:backgroundTint="#E5E5EA"
+        android:textColor="#000000"/>
 
 </LinearLayout>

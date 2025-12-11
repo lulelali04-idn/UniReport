@@ -1,7 +1,7 @@
 package com.androidtask.unireport;
 
 import android.content.Intent;
-import android.content.SharedPreferences; // IMPORT THIS
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,25 +15,21 @@ public class SignInActivity extends AppCompatActivity {
     Button btnLogin;
     TextView tvRegister;
     DBHelper dbHelper;
-    SharedPreferences sharedPreferences; // Variable to hold the tool
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // 1. CHECK IF ALREADY LOGGED IN
-        // "UniReportPrefs" is the name of the file where we save data
         sharedPreferences = getSharedPreferences("UniReportPrefs", MODE_PRIVATE);
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
         if (isLoggedIn) {
             String role = sharedPreferences.getString("role", "student");
-            // If logged in, go straight to Main
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             intent.putExtra("USER_ROLE", role);
             startActivity(intent);
             finish();
-            return; // Stop running this activity
+            return;
         }
 
         setContentView(R.layout.activity_login);
@@ -51,11 +47,10 @@ public class SignInActivity extends AppCompatActivity {
             String role = dbHelper.checkLogin(user, pass);
 
             if(role != null) {
-                // 2. SAVE LOGIN STATE
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("isLoggedIn", true);
                 editor.putString("role", role);
-                editor.apply(); // Commit changes
+                editor.apply();
 
                 Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                 intent.putExtra("USER_ROLE", role);
