@@ -16,7 +16,6 @@ public class SignUpActivity extends AppCompatActivity {
         DBHelper dbHelper = new DBHelper(this);
         EditText etUser = findViewById(R.id.etRegUser);
         EditText etPass = findViewById(R.id.etRegPass);
-        // REMOVED: RadioButton/RadioGroup logic
         Button btnReg = findViewById(R.id.btnRegister);
 
         btnReg.setOnClickListener(v -> {

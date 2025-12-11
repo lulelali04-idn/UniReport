@@ -11,8 +11,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "UniReports.db";
-    // NEW: Increment version to 4 to trigger onUpgrade
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     private static final String TABLE_REPORTS = "reports";
     private static final String TABLE_USERS = "users";
@@ -23,14 +22,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Create Reports Table with 'status'
         String createReports = "CREATE TABLE " + TABLE_REPORTS + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "title TEXT, " +
                 "description TEXT, " +
                 "location TEXT, " +
                 "category TEXT, " +
-                "status TEXT)"; // NEW COLUMN
+                "status TEXT, " +
+                "image TEXT)";
         db.execSQL(createReports);
 
         String createUsers = "CREATE TABLE " + TABLE_USERS + " (" +
@@ -38,9 +37,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 "password TEXT, " +
                 "role TEXT)";
         db.execSQL(createUsers);
-
-        // THIS IS THE "BAKED IN" ADMIN
-        // It runs automatically when the database is created
         db.execSQL("INSERT INTO " + TABLE_USERS + " VALUES ('admin', 'admin123', 'admin')");
     }
 
@@ -50,16 +46,13 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         onCreate(db);
     }
-
-    // --- USER OPERATIONS ---
     public boolean registerUser(String username, String password, String role) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("username", username);
         cv.put("password", password);
         cv.put("role", role);
-        long result = db.insert(TABLE_USERS, null, cv);
-        return result != -1;
+        return db.insert(TABLE_USERS, null, cv) != -1;
     }
 
     public String checkLogin(String username, String password) {
@@ -73,20 +66,18 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         return null;
     }
-
-    // --- REPORT OPERATIONS ---
-    public boolean addReport(String title, String desc, String loc, String category) {
+    public boolean addReport(String title, String desc, String loc, String category, String image) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("title", title);
         cv.put("description", desc);
         cv.put("location", loc);
         cv.put("category", category);
-        cv.put("status", "Active"); // Default status is Active
+        cv.put("status", "Active");
+        cv.put("image", image); // Save image
         return db.insert(TABLE_REPORTS, null, cv) != -1;
     }
 
-    // NEW: Method to mark as fixed
     public void updateReportStatus(int id, String newStatus) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -106,8 +97,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 String desc = cursor.getString(2);
                 String loc = cursor.getString(3);
                 String category = cursor.getString(4);
-                String status = cursor.getString(5); // Get status
-                returnList.add(new Report(id, title, desc, loc, category, status));
+                String status = cursor.getString(5);
+                String image = cursor.getString(6); // Retrieve image
+                returnList.add(new Report(id, title, desc, loc, category, status, image));
             } while (cursor.moveToNext());
         }
         cursor.close();

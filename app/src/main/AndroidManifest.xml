@@ -26,6 +26,8 @@
 
         <activity android:name=".SignUpActivity" />
         <activity android:name=".DetailActivity" />
+        <activity android:name=".SubmitActivity" />
+        <activity android:name=".ViewReportsActivity" />
 
     </application>
 
