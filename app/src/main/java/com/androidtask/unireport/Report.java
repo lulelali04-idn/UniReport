@@ -1,29 +1,32 @@
 package com.androidtask.unireport;
 
 public class Report {
-    // Fields matching our database columns
     private int id;
-    private String title;
-    private String description;
-    private String location;
+    private String title, description, location, category;
+    private String status; // NEW: "Active" or "Fixed"
 
-    // Constructor
-    public Report(int id, String title, String description, String location) {
+    // Updated Constructor
+    public Report(int id, String title, String description, String location, String category, String status) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
+        this.category = category;
+        this.status = status;
     }
 
-    // toString is what the ListView uses to decide what text to display
+    // toString now shows if item is FIXED
     @Override
     public String toString() {
-        return "📍 " + location + ": " + title;
+        String prefix = status.equals("Fixed") ? "[FIXED] " : "🔴 ";
+        return prefix + title + " (" + location + ")";
     }
 
-    // Getters (Good practice for expansion later)
+    // Getters
     public int getId() { return id; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }
     public String getLocation() { return location; }
+    public String getCategory() { return category; }
+    public String getStatus() { return status; }
 }
