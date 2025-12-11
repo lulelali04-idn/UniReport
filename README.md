@@ -67,7 +67,7 @@ Table: reports
 ## How to Run
 
 1. Clone the Repository:
-   git clone https://github.com/YOUR_USERNAME/UniReport.git
+   git clone https://github.com/lulelali04-idn/UniReport.git
 
 2. Open in Android Studio:
    * Select File > Open and choose the cloned folder.
